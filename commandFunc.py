@@ -8,3 +8,6 @@ def darkTheme(app):
 def lightTheme(app):
     app.textArea.config(background="#fff", foreground="#111")
     app.navBar.config(background="#fff")
+    
+    
+# this is an edit
