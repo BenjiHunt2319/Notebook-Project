@@ -3,7 +3,6 @@ from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox as msg
 
-import commandFunc
 # retrive code for modules
 from commandFunc import *
 
@@ -14,7 +13,10 @@ class Notebook:
         self.root.title("Notebook Pro")
         self.root.geometry("700x500")
         self.root.columnconfigure(0, weight=1)
-        self.root.rowconfigure(0, weight=1)
+
+        self.root.rowconfigure(0, weight=0) # navbar
+        self.root.rowconfigure(1, weight=0) # ribbon
+        self.root.rowconfigure(2, weight=1) # text area
 
         self.wrapper()
 
@@ -25,6 +27,9 @@ class Notebook:
         self.frame.rowconfigure(1, weight=1)
         self.frame.grid(row=0, column=0, sticky="nsew")
 
+        # ================================
+        # nav bar to hold all the menu items and sub menu items
+        # ================================
         self.navBar = Frame(self.frame)
         self.navBar.grid(row=0, column=0, sticky="ew")
 
@@ -54,12 +59,12 @@ class Notebook:
         self.editBtn["menu"] = self.editMenu
 
         # add the edit items
-        self.editMenu.add_command(label="Undo")
-        self.editMenu.add_command(label="Redo")
-        self.editMenu.add_command(label="Cut")
-        self.editMenu.add_command(label="Copy")
-        self.editMenu.add_command(label="Paste")
-        self.editMenu.add_command(label="Select All")
+        self.editMenu.add_command(label="Undo", command=lambda: self.textArea.event_generate("<<Undo>>"))
+        self.editMenu.add_command(label="Redo", command=lambda: self.textArea.event_generate("<<Redo>>"))
+        self.editMenu.add_command(label="Cut", command=lambda: self.textArea.event_generate("<<Cut>>"))
+        self.editMenu.add_command(label="Copy", command=lambda: self.textArea.event_generate("<<Copy>>"))
+        self.editMenu.add_command(label="Paste", command=lambda: self.textArea.event_generate("<<Paste>>"))
+        self.editMenu.add_command(label="Select All", command=lambda: self.textArea.event_generate("<<SelectAll>>"))
         self.editMenu.add_command(label="Find")
         self.editMenu.add_command(label="Replace")
         self.editBtn.grid(row=0, column=1)
@@ -111,9 +116,36 @@ class Notebook:
 
         self.toolBtn.grid(row=0, column=4)
 
+        
+        # ================================
+        # ribbon
+        # ================================
+        self.ribbon = Frame(self.frame)
+        self.ribbon.grid(row=1, column=0, sticky="ew")
+
+        self.fontSection = Frame(self.ribbon)
+        self.fontSection.grid(row=0, column=0)
+        
+        self.boldBtn = Button(self.fontSection, text="B", font=("Verdana", 8, "bold"), command=lambda: commandFunc.toggle_style(self, "bold"))
+        self.underlineBtn = Button(self.fontSection, text="U", font=("Verdana", 8, "bold"), command=lambda: commandFunc.toggle_style(self, "underline"))
+        self.italicBtn = Button(self.fontSection, text="I", font=("Verdana", 8, "bold"), command=lambda: commandFunc.toggle_style(self, "italic"))
+
+        self.boldBtn.grid(row=0, column=0)
+        self.underlineBtn.grid(row=0, column=1)
+        self.italicBtn.grid(row=0, column=2)
+
+
+
+        # ================================
         # text area
+        # ================================
         self.textArea = Text(self.frame, padx=10, pady=10 ,font=("Verdana", 12), wrap="word")
-        self.textArea.grid(row=1, column=0, sticky="nsew")
+        self.textArea.grid(row=2, column=0, sticky="nsew")
+
+        # config the fotn styles
+        self.textArea.tag_configure("bold", font=("Verdana", 12, "bold"))
+        self.textArea.tag_configure("italic", font=("Verdana", 12, "italic"))
+        self.textArea.tag_configure("underline", underline=True)
 
 
 if __name__ == "__main__":
