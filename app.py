@@ -142,11 +142,6 @@ class Notebook:
         self.textArea = Text(self.frame, padx=10, pady=10 ,font=("Verdana", 12), wrap="word")
         self.textArea.grid(row=2, column=0, sticky="nsew")
 
-        # config the fotn styles
-        self.textArea.tag_configure("bold", font=("Verdana", 12, "bold"))
-        self.textArea.tag_configure("italic", font=("Verdana", 12, "italic"))
-        self.textArea.tag_configure("underline", underline=True)
-
 
 if __name__ == "__main__":
     root = Tk()
